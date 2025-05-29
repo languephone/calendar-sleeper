@@ -13,6 +13,16 @@ struct MonthView: View {
         let weeks = monthViewModel.generateMonth()
         Grid(horizontalSpacing: 0, verticalSpacing: 0) {
             GridRow {
+                Text("Sun")
+                Text("Mon")
+                Text("Tue")
+                Text("Wed")
+                Text("Thu")
+                Text("Fri")
+                Text("Sat")
+            }
+            .font(.caption)
+            GridRow {
                 ForEach(weeks[0]) { day in
                         DayView(dayViewModel: day)
                 }
