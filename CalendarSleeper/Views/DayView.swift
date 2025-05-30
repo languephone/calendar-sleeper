@@ -22,9 +22,7 @@ struct DayView: View {
             Spacer()
             RoundedRectangle(cornerRadius: 5)
         }
-        .frame(width: 25, height: 30, alignment: .leading)
-        .padding()
-        .border(Color.gray)
+        .padding(5)
     }
 }
 

@@ -34,6 +34,7 @@ struct MonthView: View {
                             DayView(dayViewModel: monthDays[row * 7 + day], month: monthViewModel.firstDayOfMonth)
                         }
                         .padding(0)
+                        .border(Color(.gray), width: 0.2)
                     }
                 }
             }
