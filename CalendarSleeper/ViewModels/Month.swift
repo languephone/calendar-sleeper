@@ -13,6 +13,7 @@ struct MonthViewModel {
     let startWeekday: Int
     let calendarStart: Date
     var calendarEnd: Date
+    let weeksShown: Int = 5
 
     init(year: Int, month: Int) {
         self.startDateComponents = DateComponents(calendar: Calendar.current, year: year, month: month, day: 1)
@@ -24,15 +25,13 @@ struct MonthViewModel {
         calendarEnd = Calendar.current.date(byAdding: .day, value: -1, to: calendarEnd)!
     }
     
-    func generateMonth() -> [[DayViewModel]] {
-        var monthDates = [[DayViewModel]]()        // Always show 5 weeks of calendar
-        for i in 0..<5 {
-            var weekDates = [DayViewModel]()
-            for j in 0..<7 {
-                let currentDate = Calendar.current.date(byAdding: .day, value: i*7+j, to: calendarStart)
-                weekDates.append(DayViewModel(date: currentDate!, location: Location(name: "", primaryColor: .black, targetDays: 0, currentDays: 0)))
-            }
-            monthDates.append(weekDates)
+    func generateMonth() -> [DayViewModel] {
+        var monthDates: [DayViewModel] = []
+        for i in 0..<7 * weeksShown {
+            let currentDate = Calendar.current.date(byAdding: .day, value: i, to: calendarStart)
+            monthDates.append(
+                DayViewModel(date: currentDate!, location: Location(name: "", primaryColor: .black, targetDays: 0, currentDays: 0))
+            )
         }
         return monthDates
     }
