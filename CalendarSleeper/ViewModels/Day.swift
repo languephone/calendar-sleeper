@@ -18,4 +18,8 @@ struct DayViewModel: Identifiable {
         self.location = location
         self.dateComponents = Calendar.current.dateComponents([.day, .month, .year], from: date)
     }
+
+    func isWithinMonth(_ dayInMonth: Date) -> Bool {
+        Calendar.current.isDate(date, equalTo: dayInMonth, toGranularity: .month)
+    }
 }

@@ -8,44 +8,33 @@
 import SwiftUI
 
 struct MonthView: View {
-    let monthViewModel = MonthViewModel(year: 2025, month: 5)
+    let monthViewModel: MonthViewModel
     var body: some View {
-        let weeks = monthViewModel.generateMonth()
-        Grid(horizontalSpacing: 0, verticalSpacing: 0) {
-            GridRow {
-                Text("Sun")
-                Text("Mon")
-                Text("Tue")
-                Text("Wed")
-                Text("Thu")
-                Text("Fri")
-                Text("Sat")
-            }
-            .font(.caption)
-            GridRow {
-                ForEach(weeks[0]) { day in
-                        DayView(dayViewModel: day)
+        let monthDays = monthViewModel.generateMonth()
+        VStack(alignment: .leading) {
+            Text("Month \(monthViewModel.startDateComponents.month!)")
+                .font(.title)
+            Text(String(monthViewModel.startDateComponents.year!))
+                .font(.title2)
+                .padding([.bottom], 20)
+            Grid(horizontalSpacing: 0, verticalSpacing: 0) {
+                GridRow {
+                    Text("Sun")
+                    Text("Mon")
+                    Text("Tue")
+                    Text("Wed")
+                    Text("Thu")
+                    Text("Fri")
+                    Text("Sat")
                 }
-                .padding(0)
-            }
-            GridRow {
-                ForEach(weeks[1]) { day in
-                        DayView(dayViewModel: day)
-                }
-            }
-            GridRow {
-                ForEach(weeks[2]) { day in
-                        DayView(dayViewModel: day)
-                }
-            }
-            GridRow {
-                ForEach(weeks[3]) { day in
-                        DayView(dayViewModel: day)
-                }
-            }
-            GridRow {
-                ForEach(weeks[4]) { day in
-                        DayView(dayViewModel: day)
+                .font(.caption)
+                ForEach(0..<monthViewModel.weeksShown, id: \.self) { row in
+                    GridRow {
+                        ForEach(0..<7) { day in
+                            DayView(dayViewModel: monthDays[row * 7 + day], month: monthViewModel.firstDayOfMonth)
+                        }
+                        .padding(0)
+                    }
                 }
             }
         }
@@ -53,5 +42,5 @@ struct MonthView: View {
 }
 
 #Preview {
-    MonthView()
+    MonthView(monthViewModel: MonthViewModel(year: 2025, month: 7))
 }
