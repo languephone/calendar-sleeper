@@ -9,7 +9,14 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        MonthView(monthViewModel: MonthViewModel(year: 2025, month: 8))
+        TabView {
+            Tab("Calendar", systemImage: "calendar") {
+                MonthView(monthViewModel: MonthViewModel(year: 2025, month: 8))
+            }
+            Tab("Input", systemImage: "pencil.and.outline") {
+                Text("Input item here")
+            }
+        }
     }
 }
 
