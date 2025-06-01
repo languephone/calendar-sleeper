@@ -8,13 +8,21 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var monthChoice = MonthChoices.may
     var body: some View {
         TabView {
             Tab("Calendar", systemImage: "calendar") {
-                MonthView(monthViewModel: MonthViewModel(year: 2025, month: 8))
+                VStack(alignment: .leading) {
+                    Picker("Month", selection: $monthChoice) {
+                        ForEach(MonthChoices.allCases, id: \.self) {month in
+                            Text(month.rawValue)
+                        }
+                    }
+                    MonthView(monthViewModel: MonthViewModel(year: 2025, month: 8))
+                }
             }
             Tab("Input", systemImage: "pencil.and.outline") {
-                Text("Input item here")
+                LocationListView()
             }
         }
     }
