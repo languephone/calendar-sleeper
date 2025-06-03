@@ -12,26 +12,20 @@ struct MonthView: View {
     var body: some View {
         let monthDays = monthViewModel.generateMonth()
         VStack(alignment: .leading) {
-            Text(String(monthViewModel.startDateComponents.year!))
-                .font(.title2)
-                .padding([.bottom], 20)
             Grid(horizontalSpacing: 0, verticalSpacing: 0) {
+                // Header row containing weekday names
                 GridRow {
-                    Text("Sun")
-                    Text("Mon")
-                    Text("Tue")
-                    Text("Wed")
-                    Text("Thu")
-                    Text("Fri")
-                    Text("Sat")
+                    ForEach(Calendar.current.weekdaySymbols, id: \.self) { day in
+                        Text(day.prefix(3))
+                    }
                 }
                 .font(.caption)
+                // Rest of grid with days of month
                 ForEach(0..<monthViewModel.weeksShown, id: \.self) { row in
                     GridRow {
                         ForEach(0..<7) { day in
                             DayView(dayViewModel: monthDays[row * 7 + day], month: monthViewModel.firstDayOfMonth)
                         }
-                        .padding(0)
                         .border(Color(.gray), width: 0.2)
                     }
                 }
