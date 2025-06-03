@@ -15,7 +15,7 @@ struct ContentView: View {
                 VStack(alignment: .leading) {
                     Picker("Month", selection: $monthChoice) {
                         ForEach(MonthChoices.allCases, id: \.self) {month in
-                            Text(month.rawValue)
+                            Text(month.rawValue.capitalized)
                         }
                     }
                     MonthView(monthViewModel: MonthViewModel(year: 2025, month: 8))
