@@ -12,8 +12,6 @@ struct MonthView: View {
     var body: some View {
         let monthDays = monthViewModel.generateMonth()
         VStack(alignment: .leading) {
-            Text("Month \(monthViewModel.startDateComponents.month!)")
-                .font(.title)
             Text(String(monthViewModel.startDateComponents.year!))
                 .font(.title2)
                 .padding([.bottom], 20)
