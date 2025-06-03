@@ -8,17 +8,29 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var monthChoice = MonthChoices.may
+    @State private var selectedMonth: Int = Calendar.current.component(.month, from: Date())
+    @State private var selectedYear: Int = Calendar.current.component(.year, from: Date())
+    let monthNames = Calendar.current.monthSymbols
+    let yearRange = Array(2023...2026)
+
     var body: some View {
         TabView {
             Tab("Calendar", systemImage: "calendar") {
                 VStack(alignment: .leading) {
-                    Picker("Month", selection: $monthChoice) {
-                        ForEach(MonthChoices.allCases, id: \.self) {month in
-                            Text(month.rawValue.capitalized)
+                    HStack {
+                        Picker("Month", selection: $selectedMonth) {
+                            ForEach(1...12, id: \.self) { month in
+                                Text(monthNames[month - 1])
+                                    .tag(month)
+                            }
+                        }
+                        Picker("Year", selection: $selectedYear) {
+                            ForEach(yearRange, id: \.self) { year in
+                                Text(String(year)).tag(year)
+                            }
                         }
                     }
-                    MonthView(monthViewModel: MonthViewModel(year: 2025, month: 8))
+                    MonthView(monthViewModel: MonthViewModel(year: selectedYear, month: selectedMonth))
                 }
             }
             Tab("Input", systemImage: "pencil.and.outline") {

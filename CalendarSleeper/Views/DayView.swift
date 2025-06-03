@@ -32,4 +32,6 @@ struct DayView: View {
     let monthDate = Calendar.current.date(from: monthComponent)
     let dayViewModel = DayViewModel(date: Date(), location: testLocation)
     DayView(dayViewModel: dayViewModel, month: monthDate!)
+        .frame(width: 100, height: 150)
+        .border(.gray)
 }
