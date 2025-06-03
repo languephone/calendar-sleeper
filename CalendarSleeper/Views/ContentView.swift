@@ -33,7 +33,7 @@ struct ContentView: View {
                     MonthView(monthViewModel: MonthViewModel(year: selectedYear, month: selectedMonth))
                 }
             }
-            Tab("Input", systemImage: "pencil.and.outline") {
+            Tab("Locations", systemImage: "location.magnifyingglass") {
                 LocationListView()
             }
         }
