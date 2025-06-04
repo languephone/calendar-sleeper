@@ -28,10 +28,8 @@ struct DayView: View {
 
 #Preview {
     let testLocation = Location(name: "New York", primaryColor: .yellow, targetDays: 180, currentDays: 0)
-    let monthComponent = DateComponents(year: 2025, month: 5)
-    let monthDate = Calendar.current.date(from: monthComponent)
     let dayViewModel = DayViewModel(date: Date(), location: testLocation)
-    DayView(dayViewModel: dayViewModel, month: monthDate!)
+    DayView(dayViewModel: dayViewModel, month: Date())
         .frame(width: 100, height: 150)
         .border(.gray)
 }

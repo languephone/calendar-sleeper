@@ -20,6 +20,7 @@ struct MonthView: View {
                     }
                 }
                 .font(.caption)
+                .padding(.bottom, 5)
                 // Rest of grid with days of month
                 ForEach(0..<monthViewModel.weeksShown, id: \.self) { row in
                     GridRow {
