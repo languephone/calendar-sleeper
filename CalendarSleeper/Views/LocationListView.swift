@@ -25,7 +25,7 @@ struct LocationListView: View {
                 // Actual locations
                 ForEach(locations) { location in
                     NavigationLink {
-                        Text("Edit location")
+                        LocationView(location: location)
                     } label: {
                         Text(location.name)
                     }
