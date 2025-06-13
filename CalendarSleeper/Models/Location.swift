@@ -9,8 +9,8 @@ import Foundation
 import SwiftUI
 
 class Location: ObservableObject, Identifiable {
-    var name: String
-    var primaryColor: Color
+    @Published var name: String
+    @Published var primaryColor: Color
     @Published var targetDays: Int?
     var currentDays: Int = 0
     
