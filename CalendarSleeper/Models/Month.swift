@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MonthViewModel {
+struct Month {
     let startDateComponents: DateComponents
     let firstDayOfMonth: Date
     let startWeekday: Int
@@ -18,6 +18,7 @@ struct MonthViewModel {
     init(year: Int, month: Int) {
         self.startDateComponents = DateComponents(calendar: Calendar.current, year: year, month: month, day: 1)
         self.firstDayOfMonth = Calendar.current.date(from: startDateComponents) ?? Date()
+        // Calendar always starts on Sunday, so need to adjust first date in month to the nearest Sunday
         self.startWeekday = Calendar.current.component(.weekday, from: firstDayOfMonth)
         self.calendarStart = Calendar.current.date(byAdding: .day, value: 1 - startWeekday, to: firstDayOfMonth)!
         self.calendarEnd = Calendar.current.date(byAdding: .weekOfMonth, value: 5, to: calendarStart)!
@@ -25,12 +26,12 @@ struct MonthViewModel {
         calendarEnd = Calendar.current.date(byAdding: .day, value: -1, to: calendarEnd)!
     }
     
-    func generateMonth() -> [DayViewModel] {
-        var monthDates: [DayViewModel] = []
+    func generateMonth() -> [Day] {
+        var monthDates: [Day] = []
         for i in 0..<7 * weeksShown {
             let currentDate = Calendar.current.date(byAdding: .day, value: i, to: calendarStart)
             monthDates.append(
-                DayViewModel(date: currentDate!, location: nil)
+                Day(date: currentDate!, location: nil)
             )
         }
         return monthDates
