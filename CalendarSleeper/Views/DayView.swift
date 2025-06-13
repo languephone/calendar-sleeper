@@ -32,7 +32,6 @@ struct DayView: View {
 }
 
 #Preview {
-//    let testLocation = Location(name: "New York", primaryColor: .yellow, targetDays: 180, currentDays: 0)
     let dayViewModel = DayViewModel(date: Date(), location: nil)
     DayView(dayViewModel: dayViewModel, month: Date())
         .frame(width: 100, height: 150)

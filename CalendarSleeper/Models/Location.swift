@@ -8,10 +8,10 @@
 import Foundation
 import SwiftUI
 
-class Location: Identifiable {
-    let name: String
-    let primaryColor: Color
-    let targetDays: Int?
+class Location: ObservableObject, Identifiable {
+    var name: String
+    var primaryColor: Color
+    @Published var targetDays: Int?
     var currentDays: Int = 0
     
     init(name: String, primaryColor: Color, targetDays: Int?, currentDays: Int) {
