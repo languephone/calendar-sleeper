@@ -8,26 +8,26 @@
 import SwiftUI
 
 struct LocationListView: View {
+    @Binding var locations: [Location]
+
     var body: some View {
         NavigationView {
             List {
+                // Option to add new locations
                 HStack {
                     Text("Add new location")
                     Spacer()
                     Image(systemName: "plus")
                 }
-                NavigationLink {
-                    Text("Edit location")
-                } label: {
-                    HStack {
-                        Text("Location 1")
-                    }
+                .onTapGesture {
+                    locations.append(Location(name: "New Location", primaryColor: .yellow, targetDays: 100, currentDays: 0))
                 }
-                NavigationLink {
-                    Text("Edit location")
-                } label: {
-                    HStack {
-                        Text("Location 2")
+                // Actual locations
+                ForEach(locations) { location in
+                    NavigationLink {
+                        Text("Edit location")
+                    } label: {
+                        Text(location.name)
                     }
                 }
             }
@@ -37,5 +37,9 @@ struct LocationListView: View {
 }
 
 #Preview {
-    LocationListView()
+    @Previewable @State var locations: [Location] = [
+        Location(name: "London", primaryColor: .blue, targetDays: 120, currentDays: 0),
+        Location(name: "New York", primaryColor: .green, targetDays: 50, currentDays: 0)
+    ]
+    LocationListView(locations: $locations)
 }

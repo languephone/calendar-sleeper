@@ -11,6 +11,7 @@ struct ContentView: View {
     @State private var selectedMonth: Int = Calendar.current.component(.month, from: Date())
     @State private var selectedYear: Int = Calendar.current.component(.year, from: Date())
     let monthNames = Calendar.current.monthSymbols
+    @State var locations: [Location] = []
 
     var body: some View {
         TabView {
@@ -33,7 +34,7 @@ struct ContentView: View {
                 }
             }
             Tab("Locations", systemImage: "location.magnifyingglass") {
-                LocationListView()
+                LocationListView(locations: $locations)
             }
         }
     }
