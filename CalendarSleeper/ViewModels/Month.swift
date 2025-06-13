@@ -30,7 +30,7 @@ struct MonthViewModel {
         for i in 0..<7 * weeksShown {
             let currentDate = Calendar.current.date(byAdding: .day, value: i, to: calendarStart)
             monthDates.append(
-                DayViewModel(date: currentDate!, location: Location(name: "", primaryColor: .black, targetDays: 0, currentDays: 0))
+                DayViewModel(date: currentDate!, location: nil)
             )
         }
         return monthDates
