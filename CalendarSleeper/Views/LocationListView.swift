@@ -27,12 +27,20 @@ struct LocationListView: View {
                     NavigationLink {
                         LocationView(location: location)
                     } label: {
-                        Text(location.name)
+                        LocationRowView(location: location)
                     }
                 }
             }
             .navigationTitle("Edit Locations")
         }
+    }
+}
+
+struct LocationRowView: View {
+    @ObservedObject var location: Location
+
+    var body: some View {
+        Text(location.name)
     }
 }
 
