@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DayView: View {
-    let dayViewModel: DayViewModel
+    @State var dayViewModel: DayViewModel
     let month: Date
     
     var body: some View {
@@ -17,18 +17,22 @@ struct DayView: View {
                 Text("\(dayViewModel.dateComponents.day!)")
                     .foregroundStyle(dayViewModel.isWithinMonth(month) ? .black : .gray)
                     .font(.caption)
-                Spacer()
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
             Spacer()
-            RoundedRectangle(cornerRadius: 5)
         }
         .padding(5)
+        // Conditionally use location's background colour
+        .background(Color(dayViewModel.location?.primaryColor ?? .white))
+        .onTapGesture {
+            dayViewModel.toggleLocation(newLocation: Location(name: "New York", primaryColor: .yellow, targetDays: 180, currentDays: 0))
+        }
     }
 }
 
 #Preview {
-    let testLocation = Location(name: "New York", primaryColor: .yellow, targetDays: 180, currentDays: 0)
-    let dayViewModel = DayViewModel(date: Date(), location: testLocation)
+//    let testLocation = Location(name: "New York", primaryColor: .yellow, targetDays: 180, currentDays: 0)
+    let dayViewModel = DayViewModel(date: Date(), location: nil)
     DayView(dayViewModel: dayViewModel, month: Date())
         .frame(width: 100, height: 150)
         .border(.gray)

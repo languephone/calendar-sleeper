@@ -10,7 +10,7 @@ import Foundation
 struct DayViewModel: Identifiable {
     let id = UUID()
     let date: Date
-    let location: Location?
+    var location: Location?
     let dateComponents: DateComponents
     
     init(date: Date, location: Location?) {
@@ -21,5 +21,13 @@ struct DayViewModel: Identifiable {
 
     func isWithinMonth(_ dayInMonth: Date) -> Bool {
         Calendar.current.isDate(date, equalTo: dayInMonth, toGranularity: .month)
+    }
+
+    mutating func toggleLocation(newLocation: Location?) {
+        if location == nil {
+            location = newLocation
+        } else {
+            location = nil
+        }
     }
 }
