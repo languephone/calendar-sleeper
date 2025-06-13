@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct DayView: View {
-    @ObservedObject var dayViewModel: DayViewModel
+    @ObservedObject var day: Day
     let month: Date
     let location: Location = Location(name: "New York", primaryColor: .yellow, targetDays: 180, currentDays: 0)
     
     var body: some View {
         VStack {
             HStack {
-                Text("\(dayViewModel.dateComponents.day!)")
-                    .foregroundStyle(dayViewModel.isWithinMonth(month) ? .black : .gray)
+                Text("\(day.dateComponents.day!)")
+                    .foregroundStyle(day.isWithinMonth(month) ? .black : .gray)
                     .font(.caption)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
@@ -24,16 +24,16 @@ struct DayView: View {
         }
         .padding(5)
         // Conditionally use location's background colour
-        .background(Color(dayViewModel.location?.primaryColor ?? .white))
+        .background(Color(day.location?.primaryColor ?? .white))
         .onTapGesture {
-            dayViewModel.toggleLocation(location)
+            day.toggleLocation(location)
         }
     }
 }
 
 #Preview {
-    let dayViewModel = DayViewModel(date: Date(), location: nil)
-    DayView(dayViewModel: dayViewModel, month: Date())
+    let day = Day(date: Date(), location: nil)
+    DayView(day: day, month: Date())
         .frame(width: 100, height: 150)
         .border(.gray)
 }

@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct MonthView: View {
-    let monthViewModel: MonthViewModel
+    let month: Month
     var body: some View {
-        let monthDays = monthViewModel.generateMonth()
+        let monthDays = month.generateMonth()
         VStack(alignment: .leading) {
             Grid(horizontalSpacing: 0, verticalSpacing: 0) {
                 // Header row containing weekday names
@@ -22,10 +22,10 @@ struct MonthView: View {
                 .font(.caption)
                 .padding(.bottom, 5)
                 // Rest of grid with days of month
-                ForEach(0..<monthViewModel.weeksShown, id: \.self) { row in
+                ForEach(0..<month.weeksShown, id: \.self) { row in
                     GridRow {
                         ForEach(0..<7) { day in
-                            DayView(dayViewModel: monthDays[row * 7 + day], month: monthViewModel.firstDayOfMonth)
+                            DayView(day: monthDays[row * 7 + day], month: month.firstDayOfMonth)
                         }
                         .border(Color(.gray), width: 0.2)
                     }
@@ -36,5 +36,5 @@ struct MonthView: View {
 }
 
 #Preview {
-    MonthView(monthViewModel: MonthViewModel(year: 2025, month: 7))
+    MonthView(month: Month(year: 2025, month: 7))
 }

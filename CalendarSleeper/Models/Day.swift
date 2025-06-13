@@ -7,7 +7,7 @@
 
 import Foundation
 
-class DayViewModel: Identifiable, ObservableObject {
+class Day: ObservableObject, Identifiable {
     @Published var location: Location?
     let id = UUID()
     let date: Date
