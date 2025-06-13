@@ -10,8 +10,8 @@ import SwiftUI
 struct ContentView: View {
     @State private var selectedMonth: Int = Calendar.current.component(.month, from: Date())
     @State private var selectedYear: Int = Calendar.current.component(.year, from: Date())
-    let monthNames = Calendar.current.monthSymbols
     @State var locations: [Location] = []
+    let monthNames = Calendar.current.monthSymbols
 
     var body: some View {
         TabView {
