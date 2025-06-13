@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct DayView: View {
-    @State var dayViewModel: DayViewModel
+    @ObservedObject var dayViewModel: DayViewModel
     let month: Date
+    let location: Location = Location(name: "New York", primaryColor: .yellow, targetDays: 180, currentDays: 0)
     
     var body: some View {
         VStack {
@@ -25,7 +26,7 @@ struct DayView: View {
         // Conditionally use location's background colour
         .background(Color(dayViewModel.location?.primaryColor ?? .white))
         .onTapGesture {
-            dayViewModel.toggleLocation(newLocation: Location(name: "New York", primaryColor: .yellow, targetDays: 180, currentDays: 0))
+            dayViewModel.toggleLocation(location)
         }
     }
 }

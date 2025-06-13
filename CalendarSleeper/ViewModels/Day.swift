@@ -7,15 +7,15 @@
 
 import Foundation
 
-struct DayViewModel: Identifiable {
+class DayViewModel: Identifiable, ObservableObject {
+    @Published var location: Location?
     let id = UUID()
     let date: Date
-    var location: Location?
     let dateComponents: DateComponents
     
     init(date: Date, location: Location?) {
-        self.date = date
         self.location = location
+        self.date = date
         self.dateComponents = Calendar.current.dateComponents([.day, .month, .year], from: date)
     }
 
@@ -23,7 +23,7 @@ struct DayViewModel: Identifiable {
         Calendar.current.isDate(date, equalTo: dayInMonth, toGranularity: .month)
     }
 
-    mutating func toggleLocation(newLocation: Location?) {
+    func toggleLocation(_ newLocation: Location?) {
         if location == nil {
             location = newLocation
         } else {
