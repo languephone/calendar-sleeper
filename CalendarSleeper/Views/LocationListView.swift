@@ -20,14 +20,14 @@ struct LocationListView: View {
                     Image(systemName: "plus")
                 }
                 .onTapGesture {
-                    locations.append(Location(name: "New Location", primaryColor: .yellow, targetDays: 100, currentDays: 0))
+                    locations.append(Location(name: "New Location", targetDays: 100, currentDays: 0))
                 }
                 // Actual locations
                 ForEach(locations) { location in
                     NavigationLink {
                         LocationView(location: location)
                     } label: {
-                        LocationRowView(location: location)
+                        Text(location.name)
                     }
                 }
             }
@@ -36,18 +36,11 @@ struct LocationListView: View {
     }
 }
 
-struct LocationRowView: View {
-    @ObservedObject var location: Location
-
-    var body: some View {
-        Text(location.name)
-    }
-}
 
 #Preview {
     @Previewable @State var locations: [Location] = [
-        Location(name: "London", primaryColor: .blue, targetDays: 120, currentDays: 0),
-        Location(name: "New York", primaryColor: .green, targetDays: 50, currentDays: 0)
+        Location(name: "London", targetDays: 120, currentDays: 0),
+        Location(name: "New York", targetDays: 50, currentDays: 0)
     ]
     LocationListView(locations: $locations)
 }
