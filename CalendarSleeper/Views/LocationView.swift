@@ -12,16 +12,13 @@ struct LocationView: View {
     let range = 1...50
     
     var body: some View {
-        VStack(spacing: 20) {
+        Form {
             TextField("", text: $location.name)
                 .font(.largeTitle)
                 .textInputAutocapitalization(.words)
                 .disableAutocorrection(true)
                 .multilineTextAlignment(.center)
-            HStack {
-                Text("Current Days: \(location.currentDays)")
-                Spacer()
-            }
+            Text("Current Days: \(location.currentDays)")
             Stepper(
                 value: Binding(
                     get: { location.targetDays ?? 0 }, // default if nil
@@ -32,13 +29,17 @@ struct LocationView: View {
             ) {
                 Text("Target Days: \(location.targetDays ?? 0)")
             }
-            ColorPicker("Color", selection: $location.primaryColor, supportsOpacity: false)
+            Section {
+                Button(role: .destructive) {
+                } label: {
+                    Text("Delete")
+                }
+            }
         }
-        .frame(maxWidth: 300)
     }
 }
 
 #Preview {
-    @Previewable @StateObject var location = Location(name: "London", primaryColor: .blue, targetDays: 120, currentDays: 0)
+    @Previewable @StateObject var location = Location(name: "London", targetDays: 120, currentDays: 0)
     LocationView(location: location)
 }

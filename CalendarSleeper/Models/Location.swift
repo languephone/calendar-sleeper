@@ -10,13 +10,12 @@ import SwiftUI
 
 class Location: ObservableObject, Identifiable {
     @Published var name: String
-    @Published var primaryColor: Color
     @Published var targetDays: Int?
-    var currentDays: Int = 0
+    @Published var currentDays: Int = 0
+    @Published var days: [Day] = []
     
-    init(name: String, primaryColor: Color, targetDays: Int?, currentDays: Int) {
+    init(name: String, targetDays: Int?, currentDays: Int) {
         self.name = name
-        self.primaryColor = primaryColor
         self.targetDays = targetDays
         self.currentDays = currentDays
     }
