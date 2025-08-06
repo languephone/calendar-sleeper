@@ -6,15 +6,18 @@
 //
 
 import Foundation
-import SwiftUI
+import SwiftData
 
-class Location: ObservableObject, Identifiable {
-    @Published var name: String
-    @Published var targetDays: Int?
-    @Published var currentDays: Int = 0
-    @Published var days: [Day] = []
+@Model
+class Location {
+    @Attribute(.unique) var name: String
+    var targetDays: Int?
+    var currentDays: Int
+    @Relationship(deleteRule: .cascade, inverse: \Day.location)
+    var days: [Day] = []
+    @Attribute var createDate: Date = Date()
     
-    init(name: String, targetDays: Int?, currentDays: Int) {
+    init(name: String, targetDays: Int?, currentDays: Int = 0) {
         self.name = name
         self.targetDays = targetDays
         self.currentDays = currentDays

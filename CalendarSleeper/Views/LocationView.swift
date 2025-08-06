@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LocationView: View {
-    @ObservedObject var location: Location
+    @State var location: Location
     let range = 1...50
     
     var body: some View {
@@ -40,6 +40,6 @@ struct LocationView: View {
 }
 
 #Preview {
-    @Previewable @StateObject var location = Location(name: "London", targetDays: 120, currentDays: 0)
+    @Previewable @State var location = Location(name: "London", targetDays: 120, currentDays: 0)
     LocationView(location: location)
 }

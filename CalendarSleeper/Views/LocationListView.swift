@@ -6,22 +6,22 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct LocationListView: View {
-    @Binding var locations: [Location]
+    @Environment(\.modelContext) var context
+    @Query(sort: \Location.createDate, order: .reverse) var locations: [Location]
 
     var body: some View {
         NavigationView {
             List {
-                // Option to add new locations
+//                 Option to add new locations
                 HStack {
                     Text("Add new location")
                     Spacer()
                     Image(systemName: "plus")
                 }
-                .onTapGesture {
-                    locations.append(Location(name: "New Location", targetDays: 100, currentDays: 0))
-                }
+                .onTapGesture {}
                 // Actual locations
                 ForEach(locations) { location in
                     NavigationLink {
@@ -32,15 +32,28 @@ struct LocationListView: View {
                 }
             }
             .navigationTitle("Edit Locations")
+            .toolbar {
+                Button(action: {
+                    let newLocation = Location(name: "", targetDays: nil)
+                    context.insert(newLocation)
+                }, label: {
+                    Image(systemName: "plus")
+                })
+            }
         }
     }
 }
 
 
 #Preview {
-    @Previewable @State var locations: [Location] = [
-        Location(name: "London", targetDays: 120, currentDays: 0),
-        Location(name: "New York", targetDays: 50, currentDays: 0)
-    ]
-    LocationListView(locations: $locations)
+    do {
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try ModelContainer(for: Location.self, configurations: config)
+        let example = Location(name: "Test", targetDays: 50, currentDays: 0)
+        container.mainContext.insert(example)
+        return LocationListView()
+            .modelContainer(container)
+    } catch {
+        fatalError("Failed to create model container.")
+    }
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DayView: View {
-    @ObservedObject var day: Day
+    @State var day: Day
     let month: Date
     let location: Location = Location(name: "New York", targetDays: 180, currentDays: 0)
     

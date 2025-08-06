@@ -6,11 +6,11 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
     @State private var selectedMonth: Int = Calendar.current.component(.month, from: Date())
     @State private var selectedYear: Int = Calendar.current.component(.year, from: Date())
-    @State var locations: [Location] = []
     let monthNames = Calendar.current.monthSymbols
 
     var body: some View {
@@ -34,7 +34,7 @@ struct ContentView: View {
                 }
             }
             Tab("Locations", systemImage: "location.magnifyingglass") {
-                LocationListView(locations: $locations)
+                LocationListView()
             }
         }
     }
