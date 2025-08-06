@@ -6,12 +6,14 @@
 //
 
 import Foundation
+import SwiftData
 
-class Day: ObservableObject, Identifiable {
-    @Published var location: Location?
-    let id = UUID()
-    let date: Date
-    let dateComponents: DateComponents
+@Model
+class Day {
+    var location: Location?
+    var id = UUID()
+    var date: Date
+    var dateComponents: DateComponents
     
     init(date: Date, location: Location?) {
         self.location = location
