@@ -11,13 +11,11 @@ import SwiftData
 @Model
 class Location {
     @Attribute(.unique) var name: String
-    var targetDays: Int?
+    var targetDays: Int
     var currentDays: Int
-    @Relationship(deleteRule: .cascade, inverse: \Day.location)
-    var days: [Day] = []
-    @Attribute var createDate: Date = Date()
+    var createDate: Date = Date.now
     
-    init(name: String, targetDays: Int?, currentDays: Int = 0) {
+    init(name: String, targetDays: Int = 0, currentDays: Int = 0) {
         self.name = name
         self.targetDays = targetDays
         self.currentDays = currentDays
