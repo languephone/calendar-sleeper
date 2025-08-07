@@ -10,38 +10,46 @@ import SwiftData
 
 struct LocationListView: View {
     @Environment(\.modelContext) var context
-    @Query(sort: \Location.createDate, order: .reverse) var locations: [Location]
+    @Query(sort: \Location.createDate) var locations: [Location]
 
     var body: some View {
         NavigationView {
             List {
-//                 Option to add new locations
-                HStack {
-                    Text("Add new location")
-                    Spacer()
-                    Image(systemName: "plus")
-                }
-                .onTapGesture {}
-                // Actual locations
                 ForEach(locations) { location in
                     NavigationLink {
                         LocationView(location: location)
                     } label: {
-                        Text(location.name)
+                        VStack(alignment: .leading) {
+                            Text(location.name)
+                            Text("Created: \(location.createDate.formatted(date: .abbreviated, time: .omitted))")
+                                .font(.caption)
+                        }
                     }
                 }
+                .onDelete(perform: deleteLocations)
             }
-            .navigationTitle("Edit Locations")
+            .navigationTitle("Saved Locations")
             .toolbar {
-                Button(action: {
-                    let newLocation = Location(name: "", targetDays: nil)
-                    context.insert(newLocation)
-                }, label: {
+                EditButton()
+                Spacer()
+                Button(action: createLocation, label: {
                     Image(systemName: "plus")
                 })
             }
         }
     }
+
+    func createLocation() {
+        let newLocation = Location(name: "Location \(locations.count + 1)")
+        context.insert(newLocation)
+    }
+
+    func deleteLocations(_ indexSet: IndexSet) {
+            for index in indexSet {
+                let location = locations[index]
+                context.delete(location)
+            }
+        }
 }
 
 
@@ -49,7 +57,7 @@ struct LocationListView: View {
     do {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: Location.self, configurations: config)
-        let example = Location(name: "Test", targetDays: 50, currentDays: 0)
+        let example = Location(name: "Test City", targetDays: 50, currentDays: 0)
         container.mainContext.insert(example)
         return LocationListView()
             .modelContainer(container)
