@@ -8,26 +8,17 @@
 import SwiftUI
 
 struct LocationView: View {
-    @State var location: Location
-    let range = 1...50
+    @Bindable var location: Location
     
     var body: some View {
         Form {
-            TextField("", text: $location.name)
-                .font(.largeTitle)
+            TextField("Location Name", text: $location.name)
+                .font(.title)
                 .textInputAutocapitalization(.words)
                 .disableAutocorrection(true)
-                .multilineTextAlignment(.center)
             Text("Current Days: \(location.currentDays)")
-            Stepper(
-                value: Binding(
-                    get: { location.targetDays ?? 0 }, // default if nil
-                    set: { location.targetDays = $0 }
-                ),
-                in: 0...365,
-                step: 1
-            ) {
-                Text("Target Days: \(location.targetDays ?? 0)")
+            Stepper(value: $location.targetDays, in: 0...365, step: 1) {
+                Text("Target Days: \(location.targetDays)")
             }
             Section {
                 Button(role: .destructive) {
