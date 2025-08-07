@@ -13,7 +13,7 @@ struct CalendarSleeperApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .modelContainer(for: [Location.self, Day.self])
+                .modelContainer(for: [Location.self])
         }
     }
 }

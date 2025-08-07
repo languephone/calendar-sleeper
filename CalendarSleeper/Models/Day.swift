@@ -8,7 +8,7 @@
 import Foundation
 import SwiftData
 
-@Model
+//@Model
 class Day {
     var location: Location?
     var id = UUID()
