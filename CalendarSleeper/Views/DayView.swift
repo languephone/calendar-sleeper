@@ -9,9 +9,9 @@ import SwiftUI
 import SwiftData
 
 struct DayView: View {
-    @State var day: Day
     @State var location: Location?
     @State private var locationPickerPresented: Bool = false
+    let day: Day
     let month: Date
     @Query var locations: [Location]
 
@@ -20,26 +20,27 @@ struct DayView: View {
         Button(action: {
             locationPickerPresented.toggle()
         }) {
-            VStack {
-                HStack {
-                    Text("\(day.dateComponents.day!)")
-                        .foregroundStyle(day.isWithinMonth(month) ? .black : .gray)
-                        .font(.caption)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
+            VStack{
+                Text("\(day.dateComponents.day!)")
+                    .foregroundStyle(day.isWithinMonth(month) ? .black : .gray)
+                    .font(.caption)
+                    .padding(5)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
             }
-            .padding(5)
         }
-        .popover(isPresented: $locationPickerPresented, content: {
+        .popover(isPresented: $locationPickerPresented) {
+            // Becuase location var is optional and items in locations array are not,
+            // need to cast tag as Location? type.
             Picker(selection: $location, label: Text("Location")) {
                 Text("Select location").tag(nil as Location?)
                 ForEach(locations, id: \.self) { location in
                     Text(location.name).tag(location as Location?)
                 }
             }
+            .pickerStyle(.wheel)
             .presentationCompactAdaptation(.popover)
-        })
+        }
     }
 }
 
