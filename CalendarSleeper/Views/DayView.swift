@@ -27,6 +27,11 @@ struct DayView: View {
                     .padding(5)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
+                // Display chosen location if it exists
+                if let location {
+                    Text(location.name)
+                        .font(.subheadline)
+                }
             }
         }
         .popover(isPresented: $locationPickerPresented) {
