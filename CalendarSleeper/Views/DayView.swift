@@ -6,32 +6,58 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct DayView: View {
     @State var day: Day
+    @State var location: Location?
+    @State private var locationPickerPresented: Bool = false
     let month: Date
-    let location: Location = Location(name: "New York", targetDays: 180, currentDays: 0)
+    @Query var locations: [Location]
+
     
     var body: some View {
-        VStack {
-            HStack {
-                Text("\(day.dateComponents.day!)")
-                    .foregroundStyle(day.isWithinMonth(month) ? .black : .gray)
-                    .font(.caption)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+        Button(action: {
+            locationPickerPresented.toggle()
+        }) {
+            VStack {
+                HStack {
+                    Text("\(day.dateComponents.day!)")
+                        .foregroundStyle(day.isWithinMonth(month) ? .black : .gray)
+                        .font(.caption)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                Spacer()
             }
-            Spacer()
+            .padding(5)
         }
-        .padding(5)
-        .onTapGesture {
-            day.toggleLocation(location)
-        }
+        .popover(isPresented: $locationPickerPresented, content: {
+            Picker(selection: $location, label: Text("Location")) {
+                Text("Select location").tag(nil as Location?)
+                ForEach(locations, id: \.self) { location in
+                    Text(location.name).tag(location as Location?)
+                }
+            }
+            .presentationCompactAdaptation(.popover)
+        })
     }
 }
 
 #Preview {
-    let day = Day(date: Date(), location: nil)
-    DayView(day: day, month: Date())
-        .frame(width: 100, height: 150)
-        .border(.gray)
+    do {
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try ModelContainer(for: Location.self, configurations: config)
+        let example1 = Location(name: "Test City", targetDays: 50, currentDays: 0)
+        let example2 = Location(name: "Charleston", targetDays: 15, currentDays: 20)
+        container.mainContext.insert(example1)
+        container.mainContext.insert(example2)
+        let day = Day(date: Date(), location: nil)
+        
+        return DayView(day: day, month: Date())
+            .modelContainer(container)
+            .frame(width: 100, height: 150)
+            .border(.gray)
+    } catch {
+        fatalError("Failed to create model container.")
+    }
 }
