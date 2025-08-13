@@ -9,37 +9,41 @@ import SwiftUI
 import SwiftData
 
 struct DayView: View {
-    @State var location: Location?
-    @State private var locationPickerPresented: Bool = false
-    let day: Day
-    let month: Date
-    @Query var locations: [Location]
-
+    @Environment(\.modelContext) var context
+    @State var dayViewModel: DayViewModel
     
     var body: some View {
         Button(action: {
-            locationPickerPresented.toggle()
+            // If no Day model exists for date, create it and insert into context
+            if dayViewModel.day == nil {
+                dayViewModel.day = Day(date: dayViewModel.date, location: nil)
+                context.insert(dayViewModel.day!) // Safe to unwrap because day defined on prior line
+            }
+            dayViewModel.locationPickerPresented.toggle()
+            
         }) {
             VStack{
-                Text("\(day.dateComponents.day!)")
-                    .foregroundStyle(day.isWithinMonth(month) ? .black : .gray)
+                Text("\(dayViewModel.dateComponents.day!)")
+                    .foregroundStyle(dayViewModel.isWithinMonth() ? .black : .gray)
                     .font(.caption)
                     .padding(5)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
                 // Display chosen location if it exists
-                if let location {
+                if let day = dayViewModel.day, let location = day.location {
                     Text(location.name)
                         .font(.subheadline)
                 }
             }
         }
-        .popover(isPresented: $locationPickerPresented) {
+        .popover(isPresented: $dayViewModel.locationPickerPresented) {
             // Becuase location var is optional and items in locations array are not,
             // need to cast tag as Location? type.
-            Picker(selection: $location, label: Text("Location")) {
+            Picker(selection: Binding(get: { dayViewModel.day?.location },
+                                      set: { newLocation in dayViewModel.day?.location = newLocation }),
+                   label: Text("Location")) {
                 Text("Select location").tag(nil as Location?)
-                ForEach(locations, id: \.self) { location in
+                ForEach(dayViewModel.locations, id: \.self) { location in
                     Text(location.name).tag(location as Location?)
                 }
             }
@@ -53,13 +57,14 @@ struct DayView: View {
     do {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: Location.self, configurations: config)
-        let example1 = Location(name: "Test City", targetDays: 50, currentDays: 0)
-        let example2 = Location(name: "Charleston", targetDays: 15, currentDays: 20)
+        let example1 = Location(name: "Test City", targetDays: 50)
+        let example2 = Location(name: "Charleston", targetDays: 15)
         container.mainContext.insert(example1)
         container.mainContext.insert(example2)
         let day = Day(date: Date(), location: nil)
+        let dayViewModel = DayViewModel(day: nil, date: Date(), month: Date(), locations: [example1, example2])
         
-        return DayView(day: day, month: Date())
+        return DayView(dayViewModel: dayViewModel)
             .modelContainer(container)
             .frame(width: 100, height: 150)
             .border(.gray)
