@@ -12,32 +12,36 @@ struct MonthView: View {
     @Environment(\.modelContext) var context
     @Query(sort: \Location.createDate) var locations: [Location]
     @Query(sort: \Day.date) var days: [Day]
-    let startDateComponents: DateComponents
-    let firstDayOfMonth: Date
-    let startWeekday: Int
-    let calendarStart: Date
-    var calendarEnd: Date
+    let year: Int
+    let month: Int
     let weeksShown: Int = 5
-    var monthDays: [Date] = []
+    var startDateComponents: DateComponents {
+        DateComponents(calendar: Calendar.current, year: year, month: month, day: 1)
+    }
+    var firstDayOfMonth: Date {
+        Calendar.current.date(from: startDateComponents) ?? Date()
+    }
+    var startWeekday: Int {
+        Calendar.current.component(.weekday, from: firstDayOfMonth)
+    }
+    var calendarStart: Date {
+        // Calendar always starts on Sunday, so need to adjust first date in month to the nearest Sunday
+        Calendar.current.date(byAdding: .day, value: 1 - startWeekday, to: firstDayOfMonth)!
+    }
+    var calendarEnd: Date {
+        // Swift uses start of following day as end date, so need to subtract one day
+        Calendar.current.date(byAdding: .day, value: (weeksShown * 7) - 1, to: calendarStart)!
+    }
+    var monthDays: [Date] {
+        (0..<weeksShown * 7).compactMap {
+            Calendar.current.date(byAdding: .day, value: $0, to: calendarStart)
+        }
+    }
+
     // Create dict of saved dates and the corresponding Day model to feed into DayViewModel
     // if it exists for specific date in calendar
     var savedDaysDict: [Date: Day] {
         Dictionary(uniqueKeysWithValues: days.map { ($0.date, $0) })
-    }
-    
-    init(year: Int, month: Int) {
-        self.startDateComponents = DateComponents(calendar: Calendar.current, year: year, month: month, day: 1)
-        self.firstDayOfMonth = Calendar.current.date(from: startDateComponents) ?? Date()
-        // Calendar always starts on Sunday, so need to adjust first date in month to the nearest Sunday
-        self.startWeekday = Calendar.current.component(.weekday, from: firstDayOfMonth)
-        self.calendarStart = Calendar.current.date(byAdding: .day, value: 1 - startWeekday, to: firstDayOfMonth)!
-        self.calendarEnd = Calendar.current.date(byAdding: .weekOfMonth, value: 5, to: calendarStart)!
-        // Swift uses start of following day as end date, so need to subtract one day
-        calendarEnd = Calendar.current.date(byAdding: .day, value: -1, to: calendarEnd)!
-        monthDays = generateMonth()
-        
-        // Introduce compound predicate for days query
-        _days = Query(filter: #Predicate<Day> { $0.date >= calendarStart && $0.date <= calendarEnd} )
     }
 
     var body: some View {
@@ -66,15 +70,6 @@ struct MonthView: View {
                 }
             }
         }
-    }
-    
-    func generateMonth() -> [Date] {
-        var monthDates: [Date] = []
-        for i in 0..<7 * weeksShown {
-            let currentDate = Calendar.current.date(byAdding: .day, value: i, to: calendarStart) ?? Date()
-            monthDates.append(currentDate)
-        }
-        return monthDates
     }
 }
 

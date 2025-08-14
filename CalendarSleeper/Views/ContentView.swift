@@ -31,6 +31,7 @@ struct ContentView: View {
                         }
                     }
                     MonthView(year: selectedYear, month: selectedMonth)
+                        .id("\(selectedYear)-\(selectedMonth)")
                 }
             }
             Tab("Locations", systemImage: "location.magnifyingglass") {
