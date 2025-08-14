@@ -57,7 +57,7 @@ struct LocationListView: View {
     do {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: Location.self, configurations: config)
-        let example = Location(name: "Test City", targetDays: 50, currentDays: 0)
+        let example = Location(name: "Test City", targetDays: 50)
         container.mainContext.insert(example)
         return LocationListView()
             .modelContainer(container)

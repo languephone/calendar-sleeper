@@ -31,6 +31,6 @@ struct LocationView: View {
 }
 
 #Preview {
-    @Previewable @State var location = Location(name: "London", targetDays: 120, currentDays: 0)
+    @Previewable @State var location = Location(name: "London", targetDays: 120)
     LocationView(location: location)
 }
