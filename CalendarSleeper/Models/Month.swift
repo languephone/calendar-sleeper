@@ -6,14 +6,17 @@
 //
 
 import Foundation
+import SwiftData
 
-struct Month {
+@Observable
+class Month {
     let startDateComponents: DateComponents
     let firstDayOfMonth: Date
     let startWeekday: Int
     let calendarStart: Date
     var calendarEnd: Date
     let weeksShown: Int = 5
+    var monthDays: [Day] = []
 
     init(year: Int, month: Int) {
         self.startDateComponents = DateComponents(calendar: Calendar.current, year: year, month: month, day: 1)
@@ -26,7 +29,7 @@ struct Month {
         calendarEnd = Calendar.current.date(byAdding: .day, value: -1, to: calendarEnd)!
     }
     
-    func generateMonth() -> [Day] {
+    func generateMonth(savedDays: [Day]) -> [Day] {
         var monthDates: [Day] = []
         for i in 0..<7 * weeksShown {
             let currentDate = Calendar.current.date(byAdding: .day, value: i, to: calendarStart)

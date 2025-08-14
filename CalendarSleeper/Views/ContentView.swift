@@ -30,7 +30,7 @@ struct ContentView: View {
                             }
                         }
                     }
-                    MonthView(month: Month(year: selectedYear, month: selectedMonth))
+                    MonthView(year: selectedYear, month: selectedMonth)
                 }
             }
             Tab("Locations", systemImage: "location.magnifyingglass") {

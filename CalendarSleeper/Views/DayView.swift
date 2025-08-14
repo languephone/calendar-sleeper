@@ -57,11 +57,10 @@ struct DayView: View {
     do {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: Location.self, configurations: config)
-        let example1 = Location(name: "Test City", targetDays: 50)
+        let example1 = Location(name: "Savannah", targetDays: 50)
         let example2 = Location(name: "Charleston", targetDays: 15)
         container.mainContext.insert(example1)
         container.mainContext.insert(example2)
-        let day = Day(date: Date(), location: nil)
         let dayViewModel = DayViewModel(day: nil, date: Date(), month: Date(), locations: [example1, example2])
         
         return DayView(dayViewModel: dayViewModel)

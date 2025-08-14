@@ -12,12 +12,18 @@ import SwiftData
 class Location {
     @Attribute(.unique) var name: String
     var targetDays: Int
-    var currentDays: Int
-    var createDate: Date = Date.now
+    var createDate: Date
+    @Relationship(deleteRule: .cascade, inverse: \Day.location)
+    var days: [Day]
     
-    init(name: String, targetDays: Int = 0, currentDays: Int = 0) {
+    var currentDays: Int {
+        days.count
+    }
+    
+    init(name: String, targetDays: Int = 0) {
         self.name = name
         self.targetDays = targetDays
-        self.currentDays = currentDays
+        self.createDate = Date.now
+        self.days = []
     }
 }
