@@ -9,13 +9,15 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
+    @State private var selectedTab = "Calendar"
+    @State private var locationPath = NavigationPath()
     @State private var selectedMonth: Int = Calendar.current.component(.month, from: Date())
     @State private var selectedYear: Int = Calendar.current.component(.year, from: Date())
     let monthNames = Calendar.current.monthSymbols
 
     var body: some View {
-        TabView {
-            Tab("Calendar", systemImage: "calendar") {
+        TabView(selection: $selectedTab) {
+            Tab("Calendar", systemImage: "calendar", value: "Calendar") {
                 VStack(alignment: .leading) {
                     HStack {
                         Picker("Month", selection: $selectedMonth) {
@@ -34,8 +36,20 @@ struct ContentView: View {
                         .id("\(selectedYear)-\(selectedMonth)")
                 }
             }
-            Tab("Locations", systemImage: "location.magnifyingglass") {
-                LocationListView()
+            
+            Tab("Locations", systemImage: "location.magnifyingglass", value: "Locations") {
+                NavigationStack(path: $locationPath) {
+                    LocationListView()
+                }
+            }
+        }
+        .onChange(of: selectedTab) { oldValue, newValue in
+            if newValue == "Locations" {
+                // Reset navigation when the Locations tab is activated to
+                // force a data fetch and prevent the user from seeing an
+                // outdated 'currentDays' value in the LocationView
+                print("Changed to Locations")
+                locationPath = NavigationPath()
             }
         }
     }
