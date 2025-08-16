@@ -5,39 +5,48 @@
 //  Created by Daniel Shapiro on 5/30/25.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct LocationListView: View {
     @Environment(\.modelContext) var context
     @Query(sort: \Location.createDate) var locations: [Location]
 
     var body: some View {
-        NavigationStack {
-            List {
-                ForEach(locations) { location in
-                    NavigationLink {
-                        LocationView(location: location)
-                    } label: {
-                        VStack(alignment: .leading) {
-                            Text(location.name)
-                            Text("Created: \(location.createDate.formatted(date: .abbreviated, time: .omitted))")
-                                .font(.caption)
-                        }
+        // Already in a navigation stack from the parent view,
+        // so no need to re-define NavigationStack
+        List {
+            ForEach(locations) { location in
+                NavigationLink(value: location) {
+                    VStack(alignment: .leading) {
+                        Text(location.name)
+                        Text(
+                            "Created: \(location.createDate.formatted(date: .abbreviated, time: .omitted))"
+                        )
+                        .font(.caption)
                     }
                 }
-                .onDelete(perform: deleteLocations)
             }
-            .navigationTitle("Saved Locations")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    EditButton()
-                }
-                ToolbarItem() {
-                    Button(action: createLocation, label: {
+            .onDelete(perform: deleteLocations)
+        }
+        .navigationTitle("Saved Locations")
+        .navigationDestination(
+            for: Location.self,
+            destination: { location in
+                LocationView(location: location)
+            }
+        )
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                EditButton()
+            }
+            ToolbarItem {
+                Button(
+                    action: createLocation,
+                    label: {
                         Image(systemName: "plus")
-                    })
-                }
+                    }
+                )
             }
         }
     }
@@ -48,18 +57,20 @@ struct LocationListView: View {
     }
 
     func deleteLocations(_ indexSet: IndexSet) {
-            for index in indexSet {
-                let location = locations[index]
-                context.delete(location)
-            }
+        for index in indexSet {
+            let location = locations[index]
+            context.delete(location)
         }
+    }
 }
-
 
 #Preview {
     do {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try ModelContainer(for: Location.self, configurations: config)
+        let container = try ModelContainer(
+            for: Location.self,
+            configurations: config
+        )
         let example = Location(name: "Test City", targetDays: 50)
         container.mainContext.insert(example)
         return LocationListView()
