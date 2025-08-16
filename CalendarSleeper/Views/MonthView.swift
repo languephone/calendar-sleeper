@@ -48,26 +48,36 @@ struct MonthView: View {
         VStack(alignment: .leading) {
             Grid(horizontalSpacing: 0, verticalSpacing: 0) {
                 // Header row containing weekday names
-                GridRow {
-                    ForEach(Calendar.current.weekdaySymbols, id: \.self) { day in
-                        Text(day.prefix(3))
-                    }
-                }
-                .font(.caption)
-                .padding(.bottom, 5)
+                headerRow
                 // Rest of grid with days of month
-                ForEach(0..<weeksShown, id: \.self) { row in
-                    GridRow {
-                        ForEach(0..<7) { day in
-                            let monthDate = monthDays[row * 7 + day]
-                            let dayModel = savedDaysDict[monthDate]
-                            let dayViewModel = DayViewModel(day: dayModel, date: monthDate,
-                                                            month: firstDayOfMonth, locations: locations)
-                            DayView(dayViewModel: dayViewModel)
-                        }
-                        .border(Color(.gray), width: 0.2)
-                    }
+                dayRows
+            }
+        }
+    }
+
+    var headerRow: some View {
+        // Header row containing weekday names
+        GridRow {
+            ForEach(Calendar.current.weekdaySymbols, id: \.self) { day in
+                Text(day.prefix(3))
+            }
+        }
+        .font(.caption)
+        .padding(.bottom, 5)
+    }
+
+    var dayRows: some View {
+        // Rest of grid with days of month
+        ForEach(0..<weeksShown, id: \.self) { row in
+            GridRow {
+                ForEach(0..<7) { day in
+                    let monthDate = monthDays[row * 7 + day]
+                    let dayModel = savedDaysDict[monthDate]
+                    let dayViewModel = DayViewModel(day: dayModel, date: monthDate,
+                                                    month: firstDayOfMonth, locations: locations)
+                    DayView(dayViewModel: dayViewModel)
                 }
+                .border(Color(.gray), width: 0.2)
             }
         }
     }
