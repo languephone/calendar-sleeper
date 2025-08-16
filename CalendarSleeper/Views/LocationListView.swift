@@ -13,7 +13,7 @@ struct LocationListView: View {
     @Query(sort: \Location.createDate) var locations: [Location]
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 ForEach(locations) { location in
                     NavigationLink {
@@ -30,11 +30,14 @@ struct LocationListView: View {
             }
             .navigationTitle("Saved Locations")
             .toolbar {
-                EditButton()
-                Spacer()
-                Button(action: createLocation, label: {
-                    Image(systemName: "plus")
-                })
+                ToolbarItem(placement: .navigationBarLeading) {
+                    EditButton()
+                }
+                ToolbarItem() {
+                    Button(action: createLocation, label: {
+                        Image(systemName: "plus")
+                    })
+                }
             }
         }
     }
