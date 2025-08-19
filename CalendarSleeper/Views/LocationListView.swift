@@ -33,7 +33,7 @@ struct LocationListView: View {
         .navigationDestination(
             for: Location.self,
             destination: { location in
-                LocationView(location: location)
+                LocationView(location: location, tempTargetDays: Double(location.targetDays))
             }
         )
         .toolbar {
