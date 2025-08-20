@@ -12,6 +12,7 @@ struct LocationView: View {
     @Environment(\.dismiss) var dismiss
     @Bindable var location: Location
     @State var tempTargetDays: Double
+    @FocusState private var locationNameInFocus: Bool
     
     var body: some View {
         Form {
@@ -20,10 +21,11 @@ struct LocationView: View {
                 .font(.title)
                 .textInputAutocapitalization(.words)
                 .disableAutocorrection(true)
-            
+                .focused($locationNameInFocus)
+
             // Display accumulated days
             Text("Current Days: \(location.currentDays)")
-            
+
             // Edit Target Days via Slider & Stepper
             VStack(alignment: .leading) {
                 // Stepper and Slider both work on the tempTargetDays variable,
@@ -32,12 +34,18 @@ struct LocationView: View {
                 Stepper(value: $tempTargetDays,
                         in: 0...365,
                         label: { Text("Target Days: \(Int(tempTargetDays))") },
-                        onEditingChanged: { _ in location.targetDays = Int(tempTargetDays) }
+                        onEditingChanged: { _ in
+                            location.targetDays = Int(tempTargetDays)
+                            locationNameInFocus = false
+                        }
                 )
                 Slider(value: $tempTargetDays,
                        in: 0...365,
                        label: {Text("Temp Days")},
-                       onEditingChanged: { _ in  location.targetDays = Int(tempTargetDays) }
+                       onEditingChanged: { _ in
+                           location.targetDays = Int(tempTargetDays)
+                           locationNameInFocus = false
+                       }
                 )
             }
             Section {
@@ -45,6 +53,11 @@ struct LocationView: View {
                     context.delete(location)
                     dismiss()
                 }
+            }
+        }
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.locationNameInFocus = true
             }
         }
     }
