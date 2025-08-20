@@ -39,10 +39,7 @@ struct LocationView: View {
                 )
             }
             Section {
-                Button(role: .destructive) {
-                } label: {
-                    Text("Delete")
-                }
+                Button("Delete", role: .destructive) {}
             }
         }
     }

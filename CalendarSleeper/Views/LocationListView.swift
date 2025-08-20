@@ -11,6 +11,7 @@ import SwiftUI
 struct LocationListView: View {
     @Environment(\.modelContext) var context
     @Query(sort: \Location.createDate) var locations: [Location]
+    @State private var presentNewLocation = false
 
     var body: some View {
         // Already in a navigation stack from the parent view,
@@ -49,11 +50,14 @@ struct LocationListView: View {
                 )
             }
         }
+        .sheet(isPresented: $presentNewLocation) {
+            NewLocationView(tempName: "Location \(locations.count + 1)")
+                .presentationDetents([.medium])
+        }
     }
 
     func createLocation() {
-        let newLocation = Location(name: "Location \(locations.count + 1)")
-        context.insert(newLocation)
+        presentNewLocation.toggle()
     }
 
     func deleteLocations(_ indexSet: IndexSet) {
