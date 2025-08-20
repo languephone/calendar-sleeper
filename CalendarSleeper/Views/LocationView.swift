@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct LocationView: View {
+    @Environment(\.modelContext) var context
+    @Environment(\.dismiss) var dismiss
     @Bindable var location: Location
     @State var tempTargetDays: Double
     
@@ -39,7 +41,10 @@ struct LocationView: View {
                 )
             }
             Section {
-                Button("Delete", role: .destructive) {}
+                Button("Delete", role: .destructive) {
+                    context.delete(location)
+                    dismiss()
+                }
             }
         }
     }
