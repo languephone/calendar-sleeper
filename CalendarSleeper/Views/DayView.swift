@@ -24,7 +24,7 @@ struct DayView: View {
         }) {
             VStack{
                 Text("\(dayViewModel.dateComponents.day!)")
-                    .foregroundStyle(!dayViewModel.isWithinMonth() ? .primary : .secondary)
+                    .foregroundStyle(dayViewModel.isWithinMonth() ? .primary : .secondary)
                     .font(.caption)
                     .padding(5)
                     .frame(maxWidth: .infinity, alignment: .leading)
