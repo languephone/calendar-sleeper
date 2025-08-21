@@ -36,8 +36,8 @@ struct ContentView: View {
                         .id("\(selectedYear)-\(selectedMonth)")
                 }
             }
-            
-            Tab("Locations", systemImage: "location.magnifyingglass", value: "Locations") {
+
+            Tab("Locations", systemImage: "location", value: "Locations") {
                 NavigationStack(path: $locationPath) {
                     LocationListView()
                 }
