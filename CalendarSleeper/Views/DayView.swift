@@ -26,6 +26,7 @@ struct DayView: View {
                 Text("\(dayViewModel.dateComponents.day!)")
                     .foregroundStyle(dayViewModel.isWithinMonth() ? .primary : .secondary)
                     .font(.caption)
+                    .fontWeight(.semibold)
                     .padding(5)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Spacer()
