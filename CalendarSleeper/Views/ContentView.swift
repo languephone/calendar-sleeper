@@ -37,6 +37,10 @@ struct ContentView: View {
                 }
             }
 
+            Tab("Status", systemImage: "chart.bar.xaxis", value: "Charts") {
+                DonutChartView()
+            }
+
             Tab("Locations", systemImage: "location", value: "Locations") {
                 NavigationStack(path: $locationPath) {
                     LocationListView()
